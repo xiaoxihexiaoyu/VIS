@@ -5,30 +5,30 @@ interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   isLoading?: boolean;
 }
 
-export const Button: React.FC<ButtonProps> = ({ 
-  children, 
-  variant = 'primary', 
-  isLoading, 
-  className = '', 
+export const Button: React.FC<ButtonProps> = ({
+  children,
+  variant = 'primary',
+  isLoading,
+  className = '',
   disabled,
-  ...props 
+  ...props
 }) => {
-  // Swiss Style: Sharp corners, uppercase, tracking, no shadow
+  // 瑞士风格：尖角、大写、宽字距、无阴影
   const baseStyles = "px-6 py-3 text-xs font-bold uppercase tracking-widest transition-colors duration-150 flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed rounded-none";
-  
+
   const variants = {
-    // Swiss Red background, white text. Hover: Black background.
+    // 瑞士红背景，白色文字。悬停：黑色背景。
     primary: "bg-[#E30613] hover:bg-black text-white border border-transparent",
-    // White background, black border. Hover: Black background, white text.
+    // 白色背景，黑色边框。悬停：黑色背景，白色文字。
     secondary: "bg-white hover:bg-black text-black hover:text-white border border-black",
-    // Red text.
+    // 红色文字。
     danger: "bg-white text-[#E30613] border border-[#E30613] hover:bg-[#E30613] hover:text-white",
-    // Minimalist ghost
+    // 极简幽灵按钮
     ghost: "bg-transparent hover:bg-gray-100 text-gray-500 hover:text-black",
   };
 
   return (
-    <button 
+    <button
       className={`${baseStyles} ${variants[variant]} ${className}`}
       disabled={isLoading || disabled}
       {...props}
@@ -39,7 +39,7 @@ export const Button: React.FC<ButtonProps> = ({
             <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
             <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
           </svg>
-          PROCESSING
+          处理中
         </>
       ) : children}
     </button>

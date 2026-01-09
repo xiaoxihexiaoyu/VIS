@@ -1,155 +1,153 @@
-# VIS Genius
+# VIS 智能
 
 <div align="center">
-  <h3>AI-Powered Visual Identity System Generator</h3>
-  <p>Automate your brand asset creation with advanced AI design intelligence</p>
+  <h3>AI 驱动的视觉识别系统生成器</h3>
+  <p>利用先进 AI 设计智能，自动化您的品牌资产创作</p>
 </div>
 
 ---
 
-## Overview
+## 项目简介
 
-VIS Genius is an automated Visual Identity System (VIS) generator that transforms a single logo into a comprehensive brand identity system. Powered by Google Gemini 2.5 Flash AI, it generates professional-grade brand assets including logo standards, color systems, typography guides, and real-world mockups.
+VIS 智能是一个自动化的视觉识别系统（VIS）生成器，能够将单个 Logo 转化为完整的品牌识别系统。由兔子 API 的 Gemini 3 Pro Image 模型驱动，可生成专业级的品牌资产，包括标志规范、色彩系统、字体指南和真实样机。
 
-## Features
+## 功能特性
 
-### Automated VIS Generation
+### 自动化 VIS 生成
 
-Upload your logo and watch as VIS Genius generates **45+ high-fidelity brand assets** in two phases:
+上传您的 Logo，观看 VIS 智能生成 **45+ 高保真品牌资产**，分为两个阶段：
 
-- **Phase 1 - Basic System (30+ Variations)**: Logo layouts, color palettes, typography specimens, graphic patterns, and material textures
-- **Phase 2 - Application Scenarios (16+ Mockups)**: Business cards, letterheads, mobile apps, merchandise, signage, and more
+- **阶段 1 - 基础系统（30+ 变体）**：标志布局、色彩板、字体样本、图形图案和材质纹理
+- **阶段 2 - 应用场景（16+ 样机）**：名片、信头纸、移动应用、周边商品、标识标牌等
 
-### Interactive Design Chat
+### 交互式设计对话
 
-- **Natural Language Interface**: Chat with VIS Genius to generate custom assets
-- **Smart Action Detection**: The AI understands design intent and suggests appropriate actions
-- **Edit Mode**: Select any generated image and request modifications
+- **自然语言界面**：与 VIS 智能对话生成定制资产
+- **智能操作检测**：AI 理解设计意图并建议合适的操作
+- **编辑模式**：选择任何生成的图片并请求修改
 
-### Batch Processing
+### 批量处理
 
-- **4x Parallel Generation**: Concurrent AI threads for maximum efficiency
-- **Smart Batching**: Processes assets in optimized batches to balance speed and quality
+- **4x 并发生成**：并发 AI 线程实现最大效率
+- **智能分批**：以优化批次处理资产，平衡速度和质量
 
-### Multiple Aspect Ratios
+### 多种宽高比
 
-Supports `1:1`, `3:4`, `4:3`, `9:16`, and `16:9` aspect ratios for diverse output formats.
+支持 `1:1`、`3:4`、`4:3`、`9:16` 和 `16:9` 宽高比，适应多种输出格式。
 
 ---
 
-## Technology Stack
+## 技术栈
 
-| Technology | Version | Purpose |
+| 技术 | 版本 | 用途 |
 |------------|---------|---------|
-| **React** | 19.2.3 | UI Framework |
-| **Vite** | 6.2.0 | Build Tool |
-| **TypeScript** | 5.8.2 | Type Safety |
-| **Google GenAI** | 1.33.0 | AI SDK |
-| **Lucide React** | 0.561.0 | Icons |
+| **React** | 19.2.3 | UI 框架 |
+| **Vite** | 6.2.0 | 构建工具 |
+| **TypeScript** | 5.8.2 | 类型安全 |
+| **Lucide React** | 0.561.0 | 图标库 |
 
-### AI Models
+### AI 模型
 
-- **Gemini 2.5 Flash Image**: High-quality image generation with logo integration
-- **Gemini 2.5 Flash**: Design analysis and creative prompt generation
+- **Gemini 3 Pro Image Preview**：高质量图像生成，支持 Logo 集成
 
 ---
 
-## Installation
+## 安装
 
-### Prerequisites
+### 前置要求
 
-- Node.js 18+ installed
-- Google Gemini API Key ([Get one here](https://ai.google.dev/))
+- 已安装 Node.js 18+
+- 兔子 API 密钥 ([获取地址](https://app.apifox.com/web/project/7040782/apis/api-343646956-run))
 
-### Setup
+### 设置步骤
 
-1. **Clone the repository**
+1. **克隆仓库**
    ```bash
    git clone git@github.com:xiaoxihexiaoyu/VIS.git
    cd VIS
    ```
 
-2. **Install dependencies**
+2. **安装依赖**
    ```bash
    npm install
    ```
 
-3. **Configure API Key**
+3. **配置 API 密钥**
 
-   Create a `.env.local` file in the project root:
+   启动应用后，点击界面右上角的「密钥」按钮输入您的 API 密钥，或创建 `.env.local` 文件：
    ```bash
-   API_KEY=your_gemini_api_key_here
+   VITE_API_KEY=your_tuzi_api_key_here
    ```
 
-4. **Run the development server**
+4. **运行开发服务器**
    ```bash
    npm run dev
    ```
 
-5. **Open your browser**
+5. **打开浏览器**
 
-   Navigate to `http://localhost:5173`
-
----
-
-## Usage Guide
-
-### 1. Upload Your Logo
-
-Start by uploading your brand logo. The app supports PNG, JPG, and other common image formats.
-
-### 2. Automatic Generation
-
-Once uploaded, VIS Genius automatically generates:
-
-- **Logo Standards**: Grid constructions, clear space guides, lockups, scalability tests
-- **Color Systems**: Primary/secondary palettes, semantic colors, gradients
-- **Typography**: Font specimens, pairing guides, letterform details
-- **Graphic Assets**: Patterns, supergraphics, iconography sets
-- **Applications**: Business cards, mobile apps, merchandise, signage
-
-### 3. Interactive Design
-
-Use the chat interface to:
-- **Generate new assets**: "Show me a coffee cup design"
-- **Modify existing**: Select an image and say "Make it gold"
-- **Get inspired**: Click the sparkles icon for random creative concepts
-
-### 4. Download Assets
-
-Click any generated image to view it in full size and download.
+   访问 `http://localhost:5173`
 
 ---
 
-## Project Structure
+## 使用指南
+
+### 1. 上传您的 Logo
+
+首先上传您的品牌 Logo。应用支持 PNG、JPG 等常见图片格式。
+
+### 2. 自动生成
+
+上传后，VIS 智能将自动生成：
+
+- **标志规范**：网格构造、安全空间、组合样式、缩放测试
+- **色彩系统**：主/辅色板、语义色彩、渐变
+- **字体设计**：字体样本、搭配指南、字形细节
+- **图形资产**：图案、超级图形、图标集
+- **应用**：名片、移动应用、周边商品、标识标牌
+
+### 3. 交互设计
+
+使用聊天界面：
+- **生成新资产**：「给我看看咖啡杯设计」
+- **修改现有**：选择图片并说「改成金色」
+- **获取灵感**：点击星星图标获取随机创意概念
+
+### 4. 下载资产
+
+点击任何生成的图片可全尺寸查看并下载。
+
+---
+
+## 项目结构
 
 ```
 vis-genius/
 ├── components/
-│   ├── ActionCard.tsx      # Action confirmation UI
-│   ├── Button.tsx          # Reusable button component
-│   ├── ImageGrid.tsx       # Asset gallery grid
-│   ├── ImageViewer.tsx     # Full-screen image modal
-│   └── UploadArea.tsx      # Logo upload interface
+│   ├── ActionCard.tsx      # 操作确认 UI
+│   ├── Button.tsx          # 可复用按钮组件
+│   ├── ImageGrid.tsx       # 资产画廊网格
+│   ├── ImageViewer.tsx     # 全屏图片模态框
+│   └── UploadArea.tsx      # Logo 上传界面
 ├── services/
-│   └── geminiService.ts    # AI API integration
-├── App.tsx                 # Main application logic
-├── types.ts                # TypeScript definitions & VIS categories
-├── vite.config.ts          # Vite configuration
-└── tsconfig.json           # TypeScript configuration
+│   └── imageService.ts     # AI API 集成
+├── App.tsx                 # 主应用逻辑
+├── types.ts                # TypeScript 定义与 VIS 分类
+├── vite.config.ts          # Vite 配置
+└── tsconfig.json           # TypeScript 配置
 ```
 
 ---
 
-## Build for Production
+## 构建生产版本
 
 ```bash
 npm run build
 ```
 
-The built files will be in the `dist/` directory.
+构建文件将位于 `dist/` 目录。
 
-### Preview Production Build
+### 预览生产构建
 
 ```bash
 npm run preview
@@ -157,45 +155,45 @@ npm run preview
 
 ---
 
-## VIS Categories Reference
+## VIS 分类参考
 
-### Basic System Elements
+### 基础系统元素
 
-| Category | Types Included |
+| 分类 | 包含类型 |
 |----------|----------------|
-| **Logo Standards** | Technical Grid, Clear Space, Horizontal/Vertical Lockups, Symbol/Wordmark, Mono/Reverse Versions |
-| **Color Systems** | Primary Palette, Secondary Palette, Semantic Colors, Gradients, Color Weighting |
-| **Typography** | Primary/Secondary Typefaces, Pairing Guide, Baseline Grid, Letterform Details |
-| **Graphic Assets** | Geometric Patterns, Supergraphics, Fluid Shapes, Iconography Sets, Illustrations |
-| **Standards** | UI Kit, App Icons, Material Textures, Metal Fabrication, Glass Etching |
+| **标志规范** | 技术网格、安全空间、横/纵向组合、符号/文字标志、单色/反向版本 |
+| **色彩系统** | 主色板、辅助色板、语义色彩、渐变、色彩比重 |
+| **字体设计** | 主/副字体、搭配指南、基线网格、字形细节 |
+| **图形资产** | 几何图案、超级图形、流体形状、图标集、插图 |
+| **标准** | UI 套件、应用图标、材质纹理、金属制作、玻璃蚀刻 |
 
-### Application Mockups
+### 应用样机
 
-| Domain | Examples |
+| 领域 | 示例 |
 |--------|----------|
-| **Corporate** | Business Cards, Letterheads, ID Badges, Notebooks, Presentations |
-| **Digital** | Mobile Apps, Landing Pages, Social Media Feeds |
-| **Merchandise** | T-Shirts, Tote Bags, Coffee Cups, Packaging |
-| **Signage** | Office Signs, Billboards, Vehicle Wraps, Storefronts |
+| **企业用品** | 名片、信头纸、工牌、笔记本、演示文稿 |
+| **数字产品** | 移动应用、落地页、社交媒体动态 |
+| **周边商品** | T恤、环保袋、咖啡杯、包装盒 |
+| **标识标牌** | 办公标牌、广告牌、车身广告、店面标识 |
 
 ---
 
-## Environment Variables
+## 环境变量
 
-| Variable | Required | Description |
+| 变量 | 必需 | 描述 |
 |----------|----------|-------------|
-| `API_KEY` | Yes | Google Gemini API Key |
+| `VITE_API_KEY` | 否 | 兔子 API 密钥（也可在界面中输入） |
 
 ---
 
-## License
+## 开源协议
 
-This project is open source and available under the MIT License.
+本项目采用 MIT 协议开源。
 
 ---
 
-## Acknowledgments
+## 致谢
 
-- Built with [React](https://react.dev/)
-- Powered by [Google Gemini](https://ai.google.dev/)
-- Icons by [Lucide](https://lucide.dev/)
+- 使用 [React](https://react.dev/) 构建
+- 由 [兔子 API](https://api.tu-zi.com/) 提供技术支持
+- 图标来自 [Lucide](https://lucide.dev/)
