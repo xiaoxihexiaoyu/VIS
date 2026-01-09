@@ -25,7 +25,7 @@ export const UploadArea: React.FC<UploadAreaProps> = ({ onFileSelect, compact = 
       <div className="relative group">
         <label className="flex items-center gap-2 cursor-pointer bg-white hover:bg-black hover:text-white px-4 py-2 border border-black transition-colors text-xs font-bold uppercase tracking-wider">
           <Upload size={12} />
-          <span>更换Logo</span>
+          <span>更替标识</span>
           <input
             type="file"
             accept="image/*"
@@ -52,11 +52,11 @@ export const UploadArea: React.FC<UploadAreaProps> = ({ onFileSelect, compact = 
             <Plus size={48} strokeWidth={1} />
           </div>
           <p className="mb-4 text-3xl font-bold tracking-tighter uppercase">
-            上传Logo
+            呈递品牌标识
           </p>
           <div className="flex flex-col gap-1 text-xs font-mono uppercase tracking-widest opacity-60 group-hover:opacity-100">
-            <span>格式：PNG、JPG、SVG</span>
-            <span>最大大小：5MB</span>
+            <span>支持格式 · PNG · JPG · SVG</span>
+            <span>文件上限 · 5MB</span>
           </div>
         </div>
         <input

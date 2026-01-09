@@ -44,14 +44,14 @@ export const ActionCard: React.FC<ActionCardProps> = ({ action, onConfirm, onCan
               disabled={isLoading}
               className="flex-1 py-2 text-xs font-bold uppercase tracking-widest border border-gray-200 hover:bg-gray-50 text-gray-500"
             >
-              取消
+              舍弃
             </button>
             <button
               onClick={onConfirm}
               disabled={isLoading}
               className="flex-[2] bg-[#E30613] hover:bg-black text-white py-2 px-4 flex items-center justify-center gap-2 text-xs font-bold uppercase tracking-widest transition-colors"
             >
-              {isLoading ? '处理中...' : '执行'} <ArrowRight size={14} />
+              {isLoading ? '演算中...' : '执行'} <ArrowRight size={14} />
             </button>
           </div>
         </div>

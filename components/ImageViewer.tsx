@@ -26,12 +26,11 @@ export const ImageViewer: React.FC<ImageViewerProps> = ({
     if (format === 'png') {
       const link = document.createElement('a');
       link.href = image.url;
-      link.download = `vis-generated-${image.id}.png`;
+      link.download = `vis-artwork-${image.id}.png`;
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
     } else if (format === 'jpg') {
-      // 使用Canvas转换为JPG
       const img = new Image();
       img.src = image.url;
       img.crossOrigin = 'anonymous';
@@ -41,14 +40,13 @@ export const ImageViewer: React.FC<ImageViewerProps> = ({
         canvas.height = img.height || 1024;
         const ctx = canvas.getContext('2d');
         if (ctx) {
-          // JPG需要背景色，因为它不支持透明度
           ctx.fillStyle = "#FFFFFF";
           ctx.fillRect(0, 0, canvas.width, canvas.height);
           ctx.drawImage(img, 0, 0);
 
           const link = document.createElement('a');
           link.href = canvas.toDataURL('image/jpeg', 0.9);
-          link.download = `vis-generated-${image.id}.jpg`;
+          link.download = `vis-artwork-${image.id}.jpg`;
           document.body.appendChild(link);
           link.click();
           document.body.removeChild(link);
@@ -81,7 +79,7 @@ export const ImageViewer: React.FC<ImageViewerProps> = ({
           <div className="p-6 border-b border-black flex justify-between items-start">
             <div>
               <h3 className="text-xs font-bold uppercase tracking-widest text-gray-500 mb-1">状态</h3>
-              <p className="text-xl font-bold uppercase">查看中</p>
+              <p className="text-xl font-bold uppercase">审视中</p>
             </div>
             <button onClick={onClose} className="hover:bg-[#E30613] hover:text-white p-2 transition-colors border border-transparent hover:border-black">
               <X size={24} />
@@ -91,15 +89,15 @@ export const ImageViewer: React.FC<ImageViewerProps> = ({
           {/* 详情 */}
           <div className="flex-1 p-6 overflow-y-auto">
             <div className="mb-8">
-              <h3 className="text-xs font-bold uppercase tracking-widest text-gray-500 mb-2">提示词</h3>
+              <h3 className="text-xs font-bold uppercase tracking-widest text-gray-500 mb-2">创作指令</h3>
               <p className="text-lg leading-snug font-medium">{image.prompt}</p>
             </div>
             <div className="mb-8">
-              <h3 className="text-xs font-bold uppercase tracking-widest text-gray-500 mb-2">详情</h3>
+              <h3 className="text-xs font-bold uppercase tracking-widest text-gray-500 mb-2">元数据</h3>
               <ul className="text-sm font-mono space-y-1">
-                <li>ID：{image.id.slice(-8)}</li>
-                <li>时间：{new Date(image.timestamp).toLocaleTimeString()}</li>
-                <li>类型：{image.type === 'initial' ? '初始' : image.type === 'modification' ? '修改' : '上传'}</li>
+                <li>标识符：{image.id.slice(-8)}</li>
+                <li>时间戳：{new Date(image.timestamp).toLocaleTimeString()}</li>
+                <li>类型：{image.type === 'initial' ? '原始创作' : image.type === 'modification' ? '视觉重构' : '外部源'}</li>
               </ul>
             </div>
           </div>
@@ -112,7 +110,7 @@ export const ImageViewer: React.FC<ImageViewerProps> = ({
                 onClick={() => setShowDownloadMenu(!showDownloadMenu)}
                 className="w-full justify-between group"
               >
-                <span>下载选项</span>
+                <span>导出选项</span>
                 <ChevronDown size={16} className={`transition-transform duration-200 ${showDownloadMenu ? 'rotate-180' : ''}`} />
               </Button>
 
@@ -122,7 +120,7 @@ export const ImageViewer: React.FC<ImageViewerProps> = ({
                     onClick={() => handleDownload('png')}
                     className="text-left px-6 py-3 hover:bg-black hover:text-white text-xs font-bold uppercase tracking-widest transition-colors flex justify-between items-center"
                   >
-                    <span>PNG（无损）</span>
+                    <span>PNG · 无损</span>
                     <Download size={12} />
                   </button>
                   <div className="h-px bg-gray-100"></div>
@@ -130,7 +128,7 @@ export const ImageViewer: React.FC<ImageViewerProps> = ({
                     onClick={() => handleDownload('jpg')}
                     className="text-left px-6 py-3 hover:bg-black hover:text-white text-xs font-bold uppercase tracking-widest transition-colors flex justify-between items-center"
                   >
-                    <span>JPG（压缩）</span>
+                    <span>JPG · 压缩</span>
                     <Download size={12} />
                   </button>
                 </div>
@@ -142,7 +140,7 @@ export const ImageViewer: React.FC<ImageViewerProps> = ({
               onClick={() => onSelectForEdit(image)}
               className="w-full justify-between"
             >
-              <span>{isSelectedForEdit ? '聊天中激活' : '优化/编辑'}</span>
+              <span>{isSelectedForEdit ? '对话中激活' : '视觉重构'}</span>
               {isSelectedForEdit ? <Check size={16} /> : <Edit2 size={16} />}
             </Button>
           </div>

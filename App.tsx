@@ -11,22 +11,22 @@ import { ActionCard } from './components/ActionCard';
 const INITIAL_MESSAGE: ChatMessage = {
   id: 'init',
   role: 'system',
-  text: "系统已启动。\n\n我是您的自动化VIS生成器。请上传Logo以开始。\n\n我将为您生成完整的视觉识别系统，包括多种标志布局、色彩系统和完整的字体指南。"
+  text: "VIS 噩度 · 智能品牌视觉系统\n\n请上传您的品牌标识，开启视觉进化之旅。\n\n系统将为您构建完整的设计语言体系——\n从基础视觉规范到沉浸式应用场景，\n每一帧都是品牌DNA的精准表达。"
 };
 
 const RANDOM_PROMPTS = [
-  "未来感全息图从智能手表投射",
-  "赛博朋克城市雨夜中的巨大霓虹广告牌",
-  "现代美术馆极简水泥墙面蚀刻",
-  "高级哑光黑色包装上的烫金工艺",
-  "飞越瑞士阿尔卑斯山的品牌热气球",
-  "高端丝绸轰炸机夹克上的刺绣",
-  "苔藓上的激光切割金属名片",
-  "赛道上飞驰的品牌F1赛车",
-  "水下酒店窗户贴纸",
-  "舒适咖啡馆拿铁上的咖啡拉花艺术",
-  "游行中漂浮的巨型充气吉祥物",
-  "品牌宇航员头盔反光"
+  "智能穿戴设备投射的全息品牌徽章，未来主义美学",
+  "新东京赛博都会阴雨夜幕下的巨幅霓虹品牌装置",
+  "苏黎世当代美术馆极简水泥墙面的品牌蚀刻艺术",
+  "高级暗纹纸上的烫金品牌印鉴，奢华触感呈现",
+  "穿越阿尔卑斯雪域的品牌热气球，史诗级航拍",
+  "米兰时装周丝绸轰炸机夹克上的品牌刺绣",
+  "北欧森林苔藓之上的激光镂空金属名片，自然与工业的对话",
+  "蒙特卡洛F1赛道疾驰的品牌赛车，速度与激情",
+  "马尔代夫水下套房玻璃幕墙的品牌贴膜",
+  "巴黎左岸咖啡馆的拉花艺术，法式浪漫诠释",
+  "柏林街头狂欢节的巨型品牌充气装置",
+  "太空站宇航员头盔面罩上的品牌反光，星际征途"
 ];
 
 const App: React.FC = () => {
@@ -66,28 +66,25 @@ const App: React.FC = () => {
     }
 
     setLogo(base64);
-    setImages([]); // 清空旧图片
+    setImages([]);
     setEditImage(null);
     setPendingAction(null);
     setChatHistory([{
       id: Date.now().toString(),
       role: 'system',
-      text: "已获取源Logo。初始化多批次生成...\n\n阶段1：多样化基础元素（30+变体）\n阶段2：应用场景（16+样机）"
+      text: "源标识已捕获 · 视觉系统初始化中...\n\n━━━ 阶段壹 ━━━\n基础视觉规范构建\n30+ 设计语言单元\n\n━━━ 阶段贰 ━━━\n沉浸式场景演绎\n16+ 应用美学呈现"
     }]);
 
     setIsGenerating(true);
 
     try {
-      // 阶段1：基础元素
       await generateBasicSystem(base64);
-
-      // 阶段2：应用场景
       await generateApplicationScenarios(base64);
 
       setChatHistory(prev => [...prev, {
         id: Date.now().toString(),
         role: 'system',
-        text: `系统生成完成。\n\n共生成${BASIC_VI_CATEGORIES.length + VIS_CATEGORIES.length}个高保真品牌资产。\n您现在可以选择任意图片进行下载或进一步优化。`
+        text: `视觉系统构建完成\n\n${BASIC_VI_CATEGORIES.length + VIS_CATEGORIES.length} 枚品牌资产已生成\n\n您的品牌DNA现已完整呈现。\n可任意选择资产进行深度优化。`
       }]);
 
     } catch (error) {
@@ -95,7 +92,7 @@ const App: React.FC = () => {
       setChatHistory(prev => [...prev, {
         id: Date.now().toString(),
         role: 'system',
-        text: "生成序列中断。请检查您的网络连接和API密钥。"
+        text: "生成流程异常中断\n\n请核实网络连接与API密钥配置"
       }]);
     } finally {
       setLoadingStatus('');
@@ -106,23 +103,23 @@ const App: React.FC = () => {
   const generateBasicSystem = async (logoBase64: string) => {
     const tasks = BASIC_VI_CATEGORIES.map(category => ({
       categoryName: category.name,
-      prompt: `${category.promptSuffix}，请将此标志应用其中：${logoBase64}`,
+      prompt: `${category.promptSuffix}，请将此品牌标识融入设计：${logoBase64}`,
       variationLabel: '标准',
       aspectRatio: category.aspectRatio || '1:1'
     }));
 
-    await processBatch(tasks, logoBase64, '基础系统');
+    await processBatch(tasks, logoBase64, '基础规范');
   };
 
   const generateApplicationScenarios = async (logoBase64: string) => {
     const tasks = VIS_CATEGORIES.map(category => ({
       categoryName: category.name,
-      prompt: `一个${category.promptSuffix}，品牌标识可见，照片级样机，请将此标志应用其中：${logoBase64}`,
+      prompt: `${category.promptSuffix}，品牌视觉识别清晰可辨，摄影级真实感渲染，请将此品牌标识融入：${logoBase64}`,
       variationLabel: '应用',
       aspectRatio: category.aspectRatio || '1:1'
     }));
 
-    await processBatch(tasks, logoBase64, '样机');
+    await processBatch(tasks, logoBase64, '场景演绎');
   };
 
   const processBatch = async (
@@ -137,7 +134,7 @@ const App: React.FC = () => {
       const batchNumber = Math.floor(i / BATCH_SIZE) + 1;
       const totalBatches = Math.ceil(tasks.length / BATCH_SIZE);
 
-      setLoadingStatus(`正在生成${phaseLabel}：批次 ${batchNumber}/${totalBatches}`);
+      setLoadingStatus(`${phaseLabel}渲染中 · 批次 ${batchNumber}/${totalBatches}`);
 
       const promises = batch.map(async (task): Promise<GeneratedImage | null> => {
         try {
@@ -145,12 +142,12 @@ const App: React.FC = () => {
           return {
             id: Date.now() + Math.random().toString(),
             url,
-            prompt: `${task.categoryName}（${task.variationLabel}）`,
+            prompt: `${task.categoryName} · ${task.variationLabel}`,
             timestamp: Date.now(),
             type: 'initial'
           };
         } catch (e) {
-          console.error(`生成${task.categoryName}失败`, e);
+          console.error(`${task.categoryName}生成失败`, e);
           return null;
         }
       });
@@ -183,7 +180,7 @@ const App: React.FC = () => {
     };
     setChatHistory(prev => [...prev, userMsg]);
     setIsAnalyzing(true);
-    setLoadingStatus('正在分析请求...');
+    setLoadingStatus('意图解析中...');
 
     try {
       const analysis = await analyzeDesignRequest(text, !!logo, !!editImage);
@@ -199,7 +196,7 @@ const App: React.FC = () => {
           setChatHistory(prev => [...prev, {
             id: Date.now().toString(),
             role: 'system',
-            text: "操作被阻止：请先上传Logo。"
+            text: "操作暂无法执行\n\n请先行上传品牌标识"
           }]);
         } else {
           setPendingAction(analysis.suggestedAction);
@@ -211,7 +208,7 @@ const App: React.FC = () => {
       setChatHistory(prev => [...prev, {
         id: Date.now().toString(),
         role: 'system',
-        text: "通信错误。请重试。"
+        text: "通信异常\n\n请稍后重试"
       }]);
     } finally {
       setIsAnalyzing(false);
@@ -230,15 +227,15 @@ const App: React.FC = () => {
       const referenceImage = logo;
 
       if (action.type === 'MODIFY' && editImage) {
-        setLoadingStatus(`正在修改资产：${action.label.toUpperCase()}...`);
-        const promptContext = `请根据以下要求修改这张图片：${action.searchQuery}。保持主要构图但应用更改。专业设计风格。原始图片：${editImage.url}`;
+        setLoadingStatus(`资产重构中 · ${action.label}...`);
+        const promptContext = `请依据以下指令对图像进行艺术化重构：${action.searchQuery}。保留核心构图，精准演绎设计意图，专业设计美学。源图像：${editImage.url}`;
 
         const generatedUrl = await generateImage(promptContext, '1:1');
 
         const newImg: GeneratedImage = {
           id: Date.now().toString(),
           url: generatedUrl,
-          prompt: `编辑：${action.searchQuery}`,
+          prompt: `重构 · ${action.searchQuery}`,
           timestamp: Date.now(),
           type: 'modification'
         };
@@ -247,12 +244,12 @@ const App: React.FC = () => {
         setChatHistory(prev => [...prev, {
           id: Date.now().toString(),
           role: 'system',
-          text: "修改完成。",
+          text: "视觉重构完成",
           relatedImageId: newImg.id
         }]);
 
       } else {
-        setLoadingStatus(action.type === 'RANDOM' ? '正在构思随机创意...' : '正在设计变体...');
+        setLoadingStatus(action.type === 'RANDOM' ? '创意涌现中...' : '美学演绎中...');
 
         const inputForGenerator = action.type === 'RANDOM'
           ? RANDOM_PROMPTS[Math.floor(Math.random() * RANDOM_PROMPTS.length)]
@@ -260,7 +257,7 @@ const App: React.FC = () => {
 
         const creativePrompts = await generateCreativePrompts(inputForGenerator);
 
-        setLoadingStatus(`正在渲染${creativePrompts.length}个资产...`);
+        setLoadingStatus(`视觉渲染中 · ${creativePrompts.length} 构图`);
 
         const generationPromises = creativePrompts.map(async (prompt, index): Promise<GeneratedImage | null> => {
           try {
@@ -268,7 +265,7 @@ const App: React.FC = () => {
             const randomRatio = ratios[Math.floor(Math.random() * ratios.length)];
             const ratioToUse = action.type === 'RANDOM' ? randomRatio : '1:1';
 
-            const url = await generateImage(`${prompt}，品牌标志：${logo}`, ratioToUse);
+            const url = await generateImage(`${prompt}，品牌标识：${logo}`, ratioToUse);
             return {
               id: Date.now() + Math.random().toString(),
               url,
@@ -277,7 +274,7 @@ const App: React.FC = () => {
               type: 'initial'
             };
           } catch (e) {
-            console.error(`生成变体${index + 1}失败`, e);
+            console.error(`构图${index + 1}生成失败`, e);
             return null;
           }
         });
@@ -290,11 +287,11 @@ const App: React.FC = () => {
           setChatHistory(prev => [...prev, {
             id: Date.now().toString(),
             role: 'system',
-            text: `生成完成：${successfulImages.length}个新资产。`,
+            text: `美学呈现完成\n\n${successfulImages.length} 枚全新视觉资产`,
             relatedImageId: successfulImages[0].id
           }]);
         } else {
-          throw new Error("生成未产生有效结果。");
+          throw new Error("生成未产生有效结果");
         }
       }
 
@@ -303,7 +300,7 @@ const App: React.FC = () => {
       setChatHistory(prev => [...prev, {
         id: Date.now().toString(),
         role: 'system',
-        text: "生成失败。请检查API密钥和网络连接。"
+        text: "生成失败\n\n请核实API密钥与网络状态"
       }]);
     } finally {
       setIsGenerating(false);
@@ -324,7 +321,7 @@ const App: React.FC = () => {
     setChatHistory(prev => [...prev, {
       id: Date.now().toString(),
       role: 'system',
-      text: `已进入编辑模式（ID #${img.id.slice(-4)}）。\n告诉我如何修改（例如："改成金色"、"把背景换成红色"）。`
+      text: `编辑模式已激活 [资产 #${img.id.slice(-4)}]\n\n请描述您期望的视觉调整\n例：「调整为金色系」「替换深色背景」`
     }]);
   };
 
@@ -337,8 +334,8 @@ const App: React.FC = () => {
     if (!logo) return;
     setPendingAction({
       type: 'RANDOM',
-      label: '给我惊喜',
-      description: '生成一个完全随机的高品质品牌资产。',
+      label: '随机创意',
+      description: '触发全新品牌美学构想',
       searchQuery: 'random'
     });
   };
@@ -358,16 +355,16 @@ const App: React.FC = () => {
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
           <div className="bg-white border-2 border-black p-8 w-full max-w-md shadow-[8px_8px_0px_0px_rgba(0,0,0,1)]">
             <div className="flex items-center justify-between mb-6">
-              <h2 className="text-2xl font-bold uppercase tracking-tighter">设置API密钥</h2>
+              <h2 className="text-2xl font-bold uppercase tracking-tighter">API 密钥配置</h2>
               <button onClick={() => setShowApiKeyModal(false)} className="hover:bg-gray-100 p-2">
                 <X size={20} />
               </button>
             </div>
             <p className="text-sm text-gray-600 mb-4">
-              请输入您的兔子API密钥以继续使用。
+              请输入您的 API 访问令牌以启用视觉生成引擎。
               <br />
               <a href="https://app.apifox.com/web/project/7040782/apis/api-343646956-run" target="_blank" rel="noopener noreferrer" className="text-[#E30613] underline">
-                获取API密钥 →
+                获取访问令牌 →
               </a>
             </p>
             <input
@@ -389,14 +386,14 @@ const App: React.FC = () => {
                 disabled={!apiKey.trim()}
                 className="flex-1 py-3 bg-[#E30613] text-white text-sm font-bold uppercase tracking-wider hover:bg-black disabled:opacity-50"
               >
-                保存
+                确认
               </button>
             </div>
           </div>
         </div>
       )}
 
-      {/* 侧边栏：聊天与控制 */}
+      {/* 侧边栏：对话与控制 */}
       <div className="w-[400px] bg-white border-r border-black flex flex-col z-20 shrink-0 relative shadow-xl">
         {/* 头部 */}
         <div className="p-8 border-b border-black flex items-start justify-between bg-white">
@@ -405,10 +402,10 @@ const App: React.FC = () => {
               <Layout size={20} />
             </div>
             <h1 className="font-black text-3xl tracking-tighter uppercase leading-none">
-              VIS<br/>智能
+              VIS<br/>噐度
             </h1>
             <p className="mt-2 text-xs font-bold uppercase tracking-widest text-gray-500">
-              AI设计助手
+              智能品牌视觉系统
             </p>
           </div>
           <div className="flex flex-col gap-2">
@@ -417,7 +414,7 @@ const App: React.FC = () => {
               className="text-xs font-bold uppercase tracking-widest border border-black px-2 py-1 hover:bg-black hover:text-white transition-colors flex items-center gap-1"
             >
               <Key size={12} />
-              密钥
+              令牌
             </button>
             {logo && (
               <button
@@ -433,7 +430,7 @@ const App: React.FC = () => {
           </div>
         </div>
 
-        {/* 聊天记录 */}
+        {/* 对话记录 */}
         <div className="flex-1 overflow-y-auto p-0 scrollbar-hide">
           <div className="flex flex-col pb-4">
             {chatHistory.map((msg, index) => (
@@ -445,7 +442,7 @@ const App: React.FC = () => {
                   <span className={`text-[10px] font-bold uppercase tracking-widest ${
                     msg.role === 'user' ? 'text-black' : msg.role === 'model' ? 'text-[#E30613]' : 'text-gray-400'
                   }`}>
-                    {msg.role === 'model' ? 'VIS智能' : msg.role === 'user' ? '用户' : `日志 [${index.toString().padStart(3, '0')}]`}
+                    {msg.role === 'model' ? 'VIS 噐度' : msg.role === 'user' ? '您' : `系统 [${index.toString().padStart(3, '0')}]`}
                   </span>
                 </div>
 
@@ -461,7 +458,7 @@ const App: React.FC = () => {
                     }}
                     className="mt-2 self-start flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-[#E30613] hover:underline"
                   >
-                    查看输出 <ArrowRight size={12} />
+                    查看呈现 <ArrowRight size={12} />
                   </button>
                 )}
               </div>
@@ -496,7 +493,7 @@ const App: React.FC = () => {
             <div className="flex items-center justify-between bg-[#E30613] text-white p-3 border-b border-black">
               <div className="flex items-center gap-3 overflow-hidden">
                 <img src={editImage.url} className="w-8 h-8 bg-white border border-black object-cover" />
-                <span className="text-xs font-bold uppercase tracking-wider truncate">正在修改：{editImage.prompt.substring(0, 20)}...</span>
+                <span className="text-xs font-bold uppercase tracking-wider truncate">编辑中 · {editImage.prompt.substring(0, 15)}...</span>
               </div>
               <button onClick={clearEditSelection} className="hover:bg-black p-1 transition-colors">
                 <ArrowLeft size={16} />
@@ -512,7 +509,7 @@ const App: React.FC = () => {
                   onClick={triggerRandom}
                   disabled={!logo || isAnalyzing || isGenerating}
                   className="p-2 bg-white text-black border border-black hover:bg-black hover:text-white transition-colors disabled:opacity-0"
-                  title="给我惊喜（随机生成）"
+                  title="随机创意生成"
                 >
                   <Sparkles size={20} />
                 </button>
@@ -535,7 +532,7 @@ const App: React.FC = () => {
                   handleSendMessage();
                 }
               }}
-              placeholder={logo ? (editImage ? "我该如何修改这张图片？" : "与我聊聊您的品牌...") : "等待源文件..."}
+              placeholder={logo ? (editImage ? "描述您的视觉调整意图..." : "请表达您的品牌构想...") : "等待品牌标识..."}
               disabled={!logo || isAnalyzing || isGenerating}
               className="w-full bg-white text-black placeholder-gray-400 p-6 pr-24 focus:outline-none resize-none h-24 text-sm font-medium uppercase rounded-none"
             />
@@ -551,19 +548,19 @@ const App: React.FC = () => {
             <div className="col-span-1 md:col-span-8 p-12 md:p-24 flex flex-col justify-between border-b md:border-b-0 md:border-r border-black">
               <div className="space-y-2">
                 <h2 className="text-6xl md:text-8xl font-black tracking-tighter leading-[0.85] uppercase">
-                  品牌<br/>识别<br/>系统
+                  品牌<br/>视觉<br/>系统
                 </h2>
                 <div className="w-24 h-2 bg-[#E30613] mt-8"></div>
               </div>
 
               <div className="grid grid-cols-2 gap-12 max-w-lg">
                 <div>
-                  <h3 className="text-xs font-bold uppercase tracking-widest mb-4">批量处理</h3>
-                  <p className="text-sm font-medium">4个并发AI设计线程并行执行，实现最高效率。</p>
+                  <h3 className="text-xs font-bold uppercase tracking-widest mb-4">并发演算</h3>
+                  <p className="text-sm font-medium">四线程并行生成<br>效率与美学兼得</p>
                 </div>
                 <div>
-                  <h3 className="text-xs font-bold uppercase tracking-widest mb-4">VIS覆盖</h3>
-                  <p className="text-sm font-medium">全面的标志规范、色彩系统、字体指南和样机。</p>
+                  <h3 className="text-xs font-bold uppercase tracking-widest mb-4">系统覆盖</h3>
+                  <p className="text-sm font-medium">基础规范 · 场景演绎<br>全维度品牌呈现</p>
                 </div>
               </div>
             </div>
@@ -579,14 +576,14 @@ const App: React.FC = () => {
             <div className="h-16 border-b border-black flex items-center justify-between px-6 bg-white z-10 shrink-0">
               <div className="flex items-center gap-6">
                 <div className="flex flex-col">
-                  <span className="text-[10px] font-bold uppercase tracking-widest text-gray-400">项目源文件</span>
-                  <span className="text-sm font-bold uppercase">Main Logo.png</span>
+                  <span className="text-[10px] font-bold uppercase tracking-widest text-gray-400">源标识</span>
+                  <span className="text-sm font-bold uppercase">Brand Mark</span>
                 </div>
                 <div className="h-8 w-px bg-gray-200"></div>
-                <img src={logo} alt="源文件" className="h-8 w-auto border border-gray-200" />
+                <img src={logo} alt="源标识" className="h-8 w-auto border border-gray-200" />
               </div>
               <div className="flex items-center gap-4">
-                <div className="text-[10px] font-bold uppercase tracking-widest text-[#E30613]">批量模式（4x）</div>
+                <div className="text-[10px] font-bold uppercase tracking-widest text-[#E30613]">并发模式 4x</div>
                 <UploadArea onFileSelect={handleLogoUpload} compact />
               </div>
             </div>

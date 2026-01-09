@@ -12,8 +12,8 @@ export const ImageGrid: React.FC<ImageGridProps> = ({ images, onImageClick, sele
   if (images.length === 0) {
     return (
       <div className="flex flex-col items-start justify-center h-full text-black p-12 border-l border-black">
-        <h3 className="text-4xl font-bold uppercase tracking-tighter mb-4">暂无输出</h3>
-        <p className="text-sm font-mono text-gray-500 uppercase tracking-widest">等待输入流...</p>
+        <h3 className="text-4xl font-bold uppercase tracking-tighter mb-4">视觉资产暂无</h3>
+        <p className="text-sm font-mono text-gray-500 uppercase tracking-widest">等待创作指令...</p>
       </div>
     );
   }
@@ -29,7 +29,7 @@ export const ImageGrid: React.FC<ImageGridProps> = ({ images, onImageClick, sele
           {/* 图片 */}
           <img
             src={img.url}
-            alt="生成的VIS"
+            alt="视觉呈现"
             className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-500 ease-linear"
           />
 
@@ -44,7 +44,7 @@ export const ImageGrid: React.FC<ImageGridProps> = ({ images, onImageClick, sele
               <Plus size={24} />
             </div>
             <div>
-              <p className="text-white text-xs font-bold uppercase tracking-widest mb-2">生成于 {new Date(img.timestamp).toLocaleTimeString()}</p>
+              <p className="text-white text-xs font-bold uppercase tracking-widest mb-2">创作于 {new Date(img.timestamp).toLocaleTimeString()}</p>
               <p className="text-white text-lg font-bold leading-tight line-clamp-3">{img.prompt}</p>
             </div>
           </div>
