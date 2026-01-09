@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Layout, Send, ArrowRight, ArrowLeft, Sparkles, Key, X } from 'lucide-react';
+import { Layout, Send, ArrowRight, ArrowLeft, Sparkles, Key, X, Square } from 'lucide-react';
 import { GeneratedImage, VIS_CATEGORIES, BASIC_VI_CATEGORIES, ChatMessage, DesignAction, ActionType } from './types';
-import { generateImage, generateCreativePrompts, analyzeDesignRequest } from './services/imageService';
+import { generateImage, generateCreativePrompts, analyzeDesignRequest, abortAllRequests } from './services/imageService';
 import { UploadArea } from './components/UploadArea';
 import { Button } from './components/Button';
 import { ImageGrid } from './components/ImageGrid';
@@ -11,7 +11,7 @@ import { ActionCard } from './components/ActionCard';
 const INITIAL_MESSAGE: ChatMessage = {
   id: 'init',
   role: 'system',
-  text: "VIS 噩度 · 智能品牌视觉系统\n\n请上传您的品牌标识，开启视觉进化之旅。\n\n系统将为您构建完整的设计语言体系——\n从基础视觉规范到沉浸式应用场景，\n每一帧都是品牌DNA的精准表达。"
+  text: "VIS 噐度 · 智能品牌视觉系统\n\n请上传您的品牌标识，开启视觉进化之旅。\n\n系统将为您构建完整的设计语言体系——\n从基础视觉规范到沉浸式应用场景，\n每一帧都是品牌DNA的精准表达。"
 };
 
 const RANDOM_PROMPTS = [
@@ -44,6 +44,7 @@ const App: React.FC = () => {
   const [isGenerating, setIsGenerating] = useState(false);
   const [pendingAction, setPendingAction] = useState<DesignAction | null>(null);
   const [loadingStatus, setLoadingStatus] = useState<string>('');
+  const [isCancelled, setIsCancelled] = useState(false);
 
   const chatEndRef = useRef<HTMLDivElement>(null);
 
@@ -58,6 +59,21 @@ const App: React.FC = () => {
     return !!key;
   };
 
+  // 取消生成
+  const handleCancelGeneration = () => {
+    abortAllRequests();
+    setIsCancelled(true);
+    setIsGenerating(false);
+    setIsAnalyzing(false);
+    setLoadingStatus('');
+    setPendingAction(null);
+    setChatHistory(prev => [...prev, {
+      id: Date.now().toString(),
+      role: 'system',
+      text: "生成已终止\n\n可重新上传标识或调整参数继续"
+    }]);
+  };
+
   // 处理Logo上传
   const handleLogoUpload = async (base64: string) => {
     if (!checkApiKey()) {
@@ -65,6 +81,7 @@ const App: React.FC = () => {
       return;
     }
 
+    setIsCancelled(false);
     setLogo(base64);
     setImages([]);
     setEditImage(null);
@@ -89,6 +106,10 @@ const App: React.FC = () => {
 
     } catch (error) {
       console.error("序列错误", error);
+      if ((error as Error).message === 'GENERATION_ABORTED') {
+        // 已通过 handleCancelGeneration 处理
+        return;
+      }
       setChatHistory(prev => [...prev, {
         id: Date.now().toString(),
         role: 'system',
@@ -130,6 +151,11 @@ const App: React.FC = () => {
     const BATCH_SIZE = 4;
 
     for (let i = 0; i < tasks.length; i += BATCH_SIZE) {
+      // 检查是否已取消
+      if (isCancelled) {
+        throw new Error('GENERATION_ABORTED');
+      }
+
       const batch = tasks.slice(i, i + BATCH_SIZE);
       const batchNumber = Math.floor(i / BATCH_SIZE) + 1;
       const totalBatches = Math.ceil(tasks.length / BATCH_SIZE);
@@ -147,12 +173,21 @@ const App: React.FC = () => {
             type: 'initial'
           };
         } catch (e) {
+          if ((e as Error).message === 'GENERATION_ABORTED') {
+            throw e;
+          }
           console.error(`${task.categoryName}生成失败`, e);
           return null;
         }
       });
 
       const results = await Promise.all(promises);
+
+      // 再次检查是否已取消
+      if (isCancelled) {
+        throw new Error('GENERATION_ABORTED');
+      }
+
       const successfulImages = results.filter((img): img is GeneratedImage => img !== null);
 
       if (successfulImages.length > 0) {
@@ -172,6 +207,7 @@ const App: React.FC = () => {
     const text = inputValue;
     setInputValue('');
     setPendingAction(null);
+    setIsCancelled(false);
 
     const userMsg: ChatMessage = {
       id: Date.now().toString(),
@@ -222,6 +258,7 @@ const App: React.FC = () => {
     const action = pendingAction;
     setPendingAction(null);
     setIsGenerating(true);
+    setIsCancelled(false);
 
     try {
       const referenceImage = logo;
@@ -274,6 +311,9 @@ const App: React.FC = () => {
               type: 'initial'
             };
           } catch (e) {
+            if ((e as Error).message === 'GENERATION_ABORTED') {
+              throw e;
+            }
             console.error(`构图${index + 1}生成失败`, e);
             return null;
           }
@@ -296,6 +336,14 @@ const App: React.FC = () => {
       }
 
     } catch (error) {
+      if ((error as Error).message === 'GENERATION_ABORTED') {
+        setChatHistory(prev => [...prev, {
+          id: Date.now().toString(),
+          role: 'system',
+          text: "生成已终止\n\n可调整参数后重新开始"
+        }]);
+        return;
+      }
       console.error(error);
       setChatHistory(prev => [...prev, {
         id: Date.now().toString(),
@@ -465,10 +513,18 @@ const App: React.FC = () => {
             ))}
 
             {(isAnalyzing || isGenerating) && (
-              <div className="p-6 border-b border-gray-100 bg-gray-50">
+              <div className="p-6 border-b border-gray-100 bg-gray-50 flex items-center justify-between">
                 <span className="text-[10px] font-bold uppercase tracking-widest text-[#E30613] animate-pulse">
                   {loadingStatus || '处理中...'}
                 </span>
+                <button
+                  onClick={handleCancelGeneration}
+                  className="flex items-center gap-1 text-xs font-bold uppercase tracking-wider text-gray-500 hover:text-black transition-colors"
+                  title="终止生成"
+                >
+                  <Square size={12} fill="currentColor" />
+                  终止
+                </button>
               </div>
             )}
             <div ref={chatEndRef} />

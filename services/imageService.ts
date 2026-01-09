@@ -32,17 +32,38 @@ const getApiKey = (): string => {
   throw new Error('请先设置API密钥');
 };
 
+// 全局中断控制器
+let globalAbortController: AbortController | null = null;
+
+/**
+ * 取消当前正在进行的所有请求
+ */
+export const abortAllRequests = (): void => {
+  if (globalAbortController) {
+    globalAbortController.abort();
+    globalAbortController = null;
+  }
+};
+
 /**
  * 生成图像
  * @param prompt 提示词（可以包含图片URL）
  * @param size 图片尺寸，默认1x1（1024x1024）
+ * @param signal 可选的 AbortSignal 用于取消请求
  * @returns 图片URL
  */
 export const generateImage = async (
   prompt: string,
-  size: string = '1x1'
+  size: string = '1x1',
+  signal?: AbortSignal
 ): Promise<string> => {
   const apiKey = getApiKey();
+
+  // 创建新的中断控制器
+  if (!signal) {
+    globalAbortController = new AbortController();
+    signal = globalAbortController.signal;
+  }
 
   const requestBody: ImageGenerationRequest = {
     model: 'gemini-3-pro-image-preview',
@@ -60,7 +81,8 @@ export const generateImage = async (
         'Content-Type': 'application/json',
         'Authorization': `Bearer ${apiKey}`
       },
-      body: JSON.stringify(requestBody)
+      body: JSON.stringify(requestBody),
+      signal
     });
 
     if (!response.ok) {
@@ -76,6 +98,10 @@ export const generateImage = async (
 
     return data.data[0].url;
   } catch (error) {
+    // 如果是主动取消的错误，抛出特殊错误
+    if (error instanceof Error && error.name === 'AbortError') {
+      throw new Error('GENERATION_ABORTED');
+    }
     console.error('图像生成错误:', error);
     throw error;
   }
