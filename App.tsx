@@ -56,8 +56,9 @@ const App: React.FC = () => {
 
   // 检查API密钥
   const checkApiKey = (): boolean => {
-    const key = localStorage.getItem('TUZI_API_KEY') || apiKey;
-    return !!key;
+    const tuziKey = localStorage.getItem('TUZI_API_KEY') || apiKey;
+    const arkKey = localStorage.getItem('ARK_API_KEY') || arkApiKey;
+    return !!(tuziKey && arkKey);
   };
 
   // 取消生成
@@ -455,7 +456,7 @@ const App: React.FC = () => {
               </button>
               <button
                 onClick={handleSaveApiKey}
-                disabled={!apiKey.trim()}
+                disabled={!apiKey.trim() || !arkApiKey.trim()}
                 className="flex-1 py-3 bg-[#E30613] text-white text-sm font-bold uppercase tracking-wider hover:bg-black disabled:opacity-50"
               >
                 确认

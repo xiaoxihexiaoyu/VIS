@@ -177,67 +177,19 @@ export const analyzeDesignRequest = async (
 
 若无需动作，suggestedAction 设为 null。`;
 
-  try {
-    const response = await chatCompletion([
-      { role: 'system', content: systemInstruction },
-      { role: 'user', content: userMessage }
-    ], true);
+  const response = await chatCompletion([
+    { role: 'system', content: systemInstruction },
+    { role: 'user', content: userMessage }
+  ], true);
 
-    const result = JSON.parse(response) as DesignAnalysis;
+  const result = JSON.parse(response) as DesignAnalysis;
 
-    // 确保 AI 返回的结果结构正确
-    if (result.suggestedAction && !result.suggestedAction.type) {
-      result.suggestedAction = null;
-    }
-
-    return result;
-  } catch (error) {
-    console.error('分析请求错误:', error);
-
-    // 降级处理：使用简化逻辑
-    const lowerMessage = userMessage.toLowerCase();
-
-    if (lowerMessage.includes('随机') || lowerMessage.includes('惊喜') || lowerMessage.includes('灵感') || lowerMessage.includes('创意') || lowerMessage.includes('random')) {
-      return {
-        reply: '即将为您呈现全新的品牌美学构想',
-        suggestedAction: {
-          type: 'RANDOM',
-          label: '随机创意',
-          description: '触发全新的品牌美学构想',
-          searchQuery: 'random'
-        }
-      };
-    }
-
-    if (hasSelectedImage && (lowerMessage.includes('修改') || lowerMessage.includes('改变') || lowerMessage.includes('调整') || lowerMessage.includes('替换') || lowerMessage.includes('改成'))) {
-      return {
-        reply: `理解您的美学意图，将对视觉资产进行重构：${userMessage}`,
-        suggestedAction: {
-          type: 'MODIFY',
-          label: '视觉重构',
-          description: `依据您的指令进行艺术化重构`,
-          searchQuery: userMessage
-        }
-      };
-    }
-
-    if (userMessage.length > 0) {
-      return {
-        reply: `已捕获您的品牌构想，将为您演绎：${userMessage}`,
-        suggestedAction: {
-          type: 'GENERATE',
-          label: `美学演绎 · ${userMessage.substring(0, 6)}`,
-          description: `生成${userMessage}的视觉呈现`,
-          searchQuery: userMessage
-        }
-      };
-    }
-
-    return {
-      reply: '请描述您期望的品牌视觉呈现\n\n例如：名片、文化衫、品牌官网等应用场景',
-      suggestedAction: null
-    };
+  // 确保 AI 返回的结果结构正确
+  if (result.suggestedAction && !result.suggestedAction.type) {
+    result.suggestedAction = null;
   }
+
+  return result;
 };
 
 /**
@@ -259,27 +211,16 @@ export const generateCreativePrompts = async (userDescription: string): Promise<
 
 提示词风格应专业、富有艺术感，强调光影、质感与品牌呈现。`;
 
-  try {
-    const response = await chatCompletion([
-      { role: 'system', content: systemInstruction },
-      { role: 'user', content: validPrompt }
-    ], true);
+  const response = await chatCompletion([
+    { role: 'system', content: systemInstruction },
+    { role: 'user', content: validPrompt }
+  ], true);
 
-    const result = JSON.parse(response) as string[];
+  const result = JSON.parse(response) as string[];
 
-    if (!Array.isArray(result) || result.length === 0) {
-      throw new Error('AI未返回有效数组');
-    }
-
-    return result;
-  } catch (error) {
-    console.error('创意提示词生成错误:', error);
-
-    // 降级处理：返回默认提示词
-    return [
-      `${validPrompt}，专业设计美学，高品质呈现，品牌视觉识别清晰`,
-      `${validPrompt}，现代极简风格，摄影质感，品牌形象完美演绎`,
-      `${validPrompt}，创意设计美学，光影效果，品牌视觉诗意呈现`
-    ];
+  if (!Array.isArray(result) || result.length === 0) {
+    throw new Error('AI未返回有效数组');
   }
+
+  return result;
 };
