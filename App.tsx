@@ -37,6 +37,7 @@ const App: React.FC = () => {
   const [chatHistory, setChatHistory] = useState<ChatMessage[]>([INITIAL_MESSAGE]);
   const [inputValue, setInputValue] = useState('');
   const [apiKey, setApiKey] = useState<string>(() => localStorage.getItem('TUZI_API_KEY') || '');
+  const [arkApiKey, setArkApiKey] = useState<string>(() => localStorage.getItem('ARK_API_KEY') || '');
   const [showApiKeyModal, setShowApiKeyModal] = useState(false);
 
   // 流程控制状态
@@ -391,7 +392,9 @@ const App: React.FC = () => {
   // 保存API密钥
   const handleSaveApiKey = () => {
     localStorage.setItem('TUZI_API_KEY', apiKey);
+    localStorage.setItem('ARK_API_KEY', arkApiKey);
     setApiKey(apiKey);
+    setArkApiKey(arkApiKey);
     setShowApiKeyModal(false);
   };
 
@@ -408,20 +411,41 @@ const App: React.FC = () => {
                 <X size={20} />
               </button>
             </div>
-            <p className="text-sm text-gray-600 mb-4">
-              请输入您的 API 访问令牌以启用视觉生成引擎。
-              <br />
-              <a href="https://app.apifox.com/web/project/7040782/apis/api-343646956-run" target="_blank" rel="noopener noreferrer" className="text-[#E30613] underline">
+
+            {/* 图像生成 API */}
+            <div className="mb-6">
+              <label className="block text-xs font-bold uppercase tracking-widest text-gray-500 mb-2">
+                图像生成 API (兔子)
+              </label>
+              <input
+                type="password"
+                value={apiKey}
+                onChange={(e) => setApiKey(e.target.value)}
+                placeholder="Bearer sk-..."
+                className="w-full border border-black px-4 py-3 text-sm font-mono focus:outline-none focus:border-[#E30613]"
+              />
+              <a href="https://app.apifox.com/web/project/7040782/apis/api-343646956-run" target="_blank" rel="noopener noreferrer" className="text-xs text-[#E30613] underline mt-1 inline-block">
                 获取访问令牌 →
               </a>
-            </p>
-            <input
-              type="password"
-              value={apiKey}
-              onChange={(e) => setApiKey(e.target.value)}
-              placeholder="Bearer sk-..."
-              className="w-full border border-black px-4 py-3 mb-4 text-sm font-mono focus:outline-none focus:border-[#E30613]"
-            />
+            </div>
+
+            {/* 智能对话 API */}
+            <div className="mb-6">
+              <label className="block text-xs font-bold uppercase tracking-widest text-gray-500 mb-2">
+                智能对话 API (豆包)
+              </label>
+              <input
+                type="password"
+                value={arkApiKey}
+                onChange={(e) => setArkApiKey(e.target.value)}
+                placeholder="Bearer sk-..."
+                className="w-full border border-black px-4 py-3 text-sm font-mono focus:outline-none focus:border-[#E30613]"
+              />
+              <a href="https://console.volcengine.com/ark" target="_blank" rel="noopener noreferrer" className="text-xs text-[#E30613] underline mt-1 inline-block">
+                获取访问令牌 →
+              </a>
+            </div>
+
             <div className="flex gap-2">
               <button
                 onClick={() => setShowApiKeyModal(false)}
